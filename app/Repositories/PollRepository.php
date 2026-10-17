@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Option;
 use App\Models\Poll;
 
 class PollRepository
@@ -23,5 +24,23 @@ class PollRepository
     {
 
         return Poll::with('options')->get();
+    }
+
+    public function update(array $dados, string $uuid)
+    {
+        $options = $dados['options'];
+        unset($dados['options']);
+
+        $poll = Poll::findOrFail($uuid);
+
+        if ($poll->isStarted()) {
+            return false;
+        }
+
+        $poll->update($dados);
+        $poll->options()->delete();
+        $poll->options()->createMany($options);
+
+        return $poll->load('options');
     }
 }

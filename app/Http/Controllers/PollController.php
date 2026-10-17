@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePollRequest;
+use App\Http\Requests\UpdatePollRequest;
 use App\Services\PollService;
 use Illuminate\Http\Request;
+use Nette\Schema\ValidationException;
 
 class PollController extends Controller
 {
@@ -27,7 +29,17 @@ class PollController extends Controller
     public function index()
     {
 
-        $response = $this->service->getPoll();
+        $response = $this->service->index();
+
+        return response()->json($response, 200);
+    }
+
+    public function update(UpdatePollRequest $request, string $uuid)
+    {
+
+        $dados = $request->validated();
+
+        $response = $this->service->update($dados, $uuid);
 
         return response()->json($response, 200);
     }

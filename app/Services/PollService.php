@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\PollRepository;
 use Illuminate\Support\Facades\DB;
+use Nette\Schema\ValidationException;
 
 class PollService
 {
@@ -25,6 +26,20 @@ class PollService
 
     public function index()
     {
-        return $this->repository->getPoll();
+        return $this->repository->index();
+    }
+
+    public function update(array $dados, string $uuid)
+    {
+
+        return DB::transaction(function () use ($dados, $uuid) {
+            $update = $this->repository->update($dados, $uuid);
+
+            if ($update == false) {
+                abort(422, 'A enquete já foi iniciada e não pode ser editada.');
+            }
+
+            return $update;
+        });
     }
 }

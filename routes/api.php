@@ -6,3 +6,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('/polls', [PollController::class, 'storePoll']);
 
 Route::get('/polls', [PollController::class, 'index']);
+
+Route::put('/polls/{$uuid}', [PollController::class, 'update']);

@@ -21,4 +21,9 @@ class Poll extends Model
     {
         return $this->hasMany(Option::class);
     }
+
+    public function isStarted(): bool{
+
+        return $this->status != 'nao iniciado';
+    }
 }
