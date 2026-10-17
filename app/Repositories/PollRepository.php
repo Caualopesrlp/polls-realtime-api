@@ -18,4 +18,10 @@ class PollRepository
 
         return $poll;
     }
+
+    public function index()
+    {
+
+        return Poll::with('options')->get();
+    }
 }

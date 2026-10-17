@@ -14,12 +14,21 @@ class PollController extends Controller
     {
         $this->service = $service;
     }
-    public function storePoll(StorePollRequest $request){
+    public function storePoll(StorePollRequest $request)
+    {
 
         $dados = $request->validated();
 
         $response = $this->service->storePoll($dados);
 
         return response()->json($response, 201);
+    }
+
+    public function index()
+    {
+
+        $response = $this->service->getPoll();
+
+        return response()->json($response, 200);
     }
 }

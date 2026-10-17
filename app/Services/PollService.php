@@ -15,10 +15,16 @@ class PollService
         $this->repository = $repository;
     }
 
-    public function storePoll(array $dados) {
+    public function storePoll(array $dados)
+    {
 
         return DB::transaction(function () use ($dados) {
             return $this->repository->storePoll($dados);
         });
+    }
+
+    public function index()
+    {
+        return $this->repository->getPoll();
     }
 }
