@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OptionVoted;
 use App\Repositories\PollRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -44,14 +45,16 @@ class PollService
 
     public function vote(string $pollId, string $optionId)
     {
-        return DB::transaction(function () use ($pollId, $optionId){
+        return DB::transaction(function () use ($pollId, $optionId) {
             $voto = $this->repository->vote($pollId, $optionId);
 
-            if($voto === 'POLL_CLOSED'){
+            if ($voto === 'POLL_CLOSED') {
                 abort(422, 'A enquete não pode receber votos.');
-            } else if ($voto === 'INVALID_OPTION'){
+            } else if ($voto === 'INVALID_OPTION') {
                 abort(422, 'Não é possível votar nessa opção');
             }
+
+            OptionVoted::dispatch($pollId, $optionId, $voto);
 
             return $voto;
         });

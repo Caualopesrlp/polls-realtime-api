@@ -60,7 +60,11 @@ class PollRepository
             return 'INVALID_OPTION';
         }
 
-        return $option;
+        $totalVotos = Option::where('id', $optionId)
+            ->where('poll_id', $pollId)
+            ->value('votes');
+
+        return $totalVotos;
     }
 
     public function show(string $pollId)
