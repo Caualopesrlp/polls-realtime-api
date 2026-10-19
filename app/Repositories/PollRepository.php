@@ -62,4 +62,9 @@ class PollRepository
 
         return $option;
     }
+
+    public function show(string $pollId)
+    {
+        return Poll::with('options')->findOrFail($pollId);
+    }
 }

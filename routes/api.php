@@ -10,3 +10,5 @@ Route::get('/polls', [PollController::class, 'index']);
 Route::put('/polls/{uuid}', [PollController::class, 'update']);
 
 Route::post('/polls/{id}/votes/{optionId}', [PollController::class, 'vote']);
+
+Route::get('/polls/{id}', [PollController::class, 'show']);

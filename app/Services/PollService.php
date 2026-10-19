@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repositories\PollRepository;
 use Illuminate\Support\Facades\DB;
-use Nette\Schema\ValidationException;
 
 class PollService
 {
@@ -56,5 +55,10 @@ class PollService
 
             return $voto;
         });
+    }
+
+    public function show(string $pollId)
+    {
+        return $this->repository->show($pollId);
     }
 }
