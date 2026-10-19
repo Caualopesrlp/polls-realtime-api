@@ -42,4 +42,19 @@ class PollService
             return $update;
         });
     }
+
+    public function vote(string $pollId, string $optionId)
+    {
+        return DB::transaction(function () use ($pollId, $optionId){
+            $voto = $this->repository->vote($pollId, $optionId);
+
+            if($voto === 'POLL_CLOSED'){
+                abort(422, 'A enquete não pode receber votos.');
+            } else if ($voto === 'INVALID_OPTION'){
+                abort(422, 'Não é possível votar nessa opção');
+            }
+
+            return $voto;
+        });
+    }
 }

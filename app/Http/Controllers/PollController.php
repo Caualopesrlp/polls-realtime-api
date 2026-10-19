@@ -43,4 +43,12 @@ class PollController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function vote(string $pollId, string $optionId)
+    {
+
+        $response = $this->service->vote($pollId, $optionId);
+
+        return response()->json($response, 200);
+    }
 }

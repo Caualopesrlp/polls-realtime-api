@@ -22,8 +22,18 @@ class Poll extends Model
         return $this->hasMany(Option::class);
     }
 
-    public function isStarted(): bool{
+    public function isStarted(): bool
+    {
 
         return $this->status != 'nao iniciado';
+    }
+
+    public function isOpen(): bool
+    {
+        if (now() >= $this->start_date && now() <= $this->end_date && $this->status != 'nao iniciado' && $this->status != 'finalizado') {
+            return true;
+        }
+
+        return false;
     }
 }

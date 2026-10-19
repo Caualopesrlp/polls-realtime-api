@@ -43,4 +43,23 @@ class PollRepository
 
         return $poll->load('options');
     }
+
+    public function vote(string $pollId, string $optionId)
+    {
+        $poll = Poll::findOrFail($pollId);
+
+        if (!$poll->isOpen()) {
+            return 'POLL_CLOSED';
+        }
+
+        $option = Option::where('id', $optionId)
+            ->where('poll_id', $pollId)
+            ->increment('votes');
+
+        if ($option === 0) {
+            return 'INVALID_OPTION';
+        }
+
+        return $option;
+    }
 }
