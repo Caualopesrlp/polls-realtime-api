@@ -6,8 +6,6 @@ use App\Http\Requests\StorePollRequest;
 use App\Http\Requests\UpdatePollRequest;
 use App\Http\Resources\PollResource;
 use App\Services\PollService;
-use Illuminate\Http\Request;
-use Nette\Schema\ValidationException;
 
 class PollController extends Controller
 {
@@ -17,14 +15,13 @@ class PollController extends Controller
     {
         $this->service = $service;
     }
+
     public function storePoll(StorePollRequest $request)
     {
-
         $dados = $request->validated();
-
         $response = $this->service->storePoll($dados);
 
-        return response()->json($response, 201);
+        return (new PollResource($response))->response()->setStatusCode(201);
     }
 
     public function index()
@@ -34,17 +31,14 @@ class PollController extends Controller
 
     public function update(UpdatePollRequest $request, string $uuid)
     {
-
         $dados = $request->validated();
-
         $response = $this->service->update($dados, $uuid);
 
-        return response()->json($response, 200);
+        return new PollResource($response);
     }
 
     public function vote(string $pollId, string $optionId)
     {
-
         $response = $this->service->vote($pollId, $optionId);
 
         return response()->json([

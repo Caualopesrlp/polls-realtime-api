@@ -7,7 +7,6 @@ use App\Models\Poll;
 
 class PollRepository
 {
-
     public function storePoll(array $dados)
     {
         $options = $dados['options'];
@@ -15,31 +14,31 @@ class PollRepository
 
         $poll = Poll::create($dados);
         $poll->options()->createMany($options);
-        $poll->load('options');
 
-        return $poll;
+        return $poll->load('options');
     }
 
     public function index()
     {
-
         return Poll::with('options')->get();
     }
 
     public function update(array $dados, string $uuid)
     {
-        $options = $dados['options'];
-        unset($dados['options']);
-
         $poll = Poll::findOrFail($uuid);
 
         if ($poll->isStarted()) {
             return false;
         }
 
+        if (isset($dados['options'])) {
+            $options = $dados['options'];
+            unset($dados['options']);
+            $poll->options()->delete();
+            $poll->options()->createMany($options);
+        }
+
         $poll->update($dados);
-        $poll->options()->delete();
-        $poll->options()->createMany($options);
 
         return $poll->load('options');
     }
@@ -60,11 +59,9 @@ class PollRepository
             return 'INVALID_OPTION';
         }
 
-        $totalVotos = Option::where('id', $optionId)
+        return Option::where('id', $optionId)
             ->where('poll_id', $pollId)
             ->value('votes');
-
-        return $totalVotos;
     }
 
     public function show(string $pollId)

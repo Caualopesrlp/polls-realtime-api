@@ -17,6 +17,10 @@ class Poll extends Model
         'end_date',
     ];
 
+    protected $attributes = [
+        'status' => 'nao_iniciado',
+    ];
+
     public function options(): HasMany
     {
         return $this->hasMany(Option::class);
@@ -24,16 +28,14 @@ class Poll extends Model
 
     public function isStarted(): bool
     {
-
-        return $this->status != 'nao iniciado';
+        return $this->status !== 'nao_iniciado';
     }
 
     public function isOpen(): bool
     {
-        if (now() >= $this->start_date && now() <= $this->end_date && $this->status != 'nao iniciado' && $this->status != 'finalizado') {
-            return true;
-        }
-
-        return false;
+        return now() >= $this->start_date
+            && now() <= $this->end_date
+            && $this->status !== 'nao_iniciado'
+            && $this->status !== 'finalizado';
     }
 }
