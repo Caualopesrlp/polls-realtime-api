@@ -47,7 +47,7 @@ class PollRepository
     {
         $poll = Poll::findOrFail($pollId);
 
-        if (!$poll->isOpen()) {
+        if (! $poll->isOpen()) {
             return 'POLL_CLOSED';
         }
 

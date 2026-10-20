@@ -18,10 +18,10 @@ class PollResource extends JsonResource
 
         $options = $this->options->map(function ($option) use ($totalVotes) {
             return [
-                'id'         => $option->id,
-                'poll_id'    => $option->poll_id,
-                'text'       => $option->text,
-                'votes'      => $option->votes,
+                'id' => $option->id,
+                'poll_id' => $option->poll_id,
+                'text' => $option->text,
+                'votes' => $option->votes,
                 'percentage' => $totalVotes > 0
                     ? round(($option->votes / $totalVotes) * 100, 2)
                     : 0,
@@ -31,15 +31,15 @@ class PollResource extends JsonResource
         });
 
         return [
-            'id'          => $this->id,
-            'question'    => $this->question,
-            'status'      => $this->status,
-            'start_date'  => $this->start_date,
-            'end_date'    => $this->end_date,
-            'created_at'  => $this->created_at,
-            'updated_at'  => $this->updated_at,
+            'id' => $this->id,
+            'question' => $this->question,
+            'status' => $this->status,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'total_votes' => $totalVotes,
-            'options'     => $options,
+            'options' => $options,
         ];
     }
 }

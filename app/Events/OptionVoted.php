@@ -13,9 +13,13 @@ class OptionVoted implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public string $pollId;
+
     public string $optionId;
+
     public int $votes;
+
     public int $totalVotes;
+
     public float $percentage;
 
     /**
@@ -38,7 +42,7 @@ class OptionVoted implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('poll.' . $this->pollId),
+            new Channel('poll.'.$this->pollId),
         ];
     }
 }

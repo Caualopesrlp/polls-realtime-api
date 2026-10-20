@@ -2,25 +2,25 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PollStatus;
+use App\Events\OptionVoted;
 use App\Models\Poll;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Events\OptionVoted;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class PollControllerTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public function test_pode_criar_enquete_com_sucesso(): void
     {
         $payload = [
-            'question'   => 'Qual o seu framework favorito?',
+            'question' => 'Qual o seu framework favorito?',
             'start_date' => now()->addDay()->toDateTimeString(),
-            'end_date'   => now()->addDays(7)->toDateTimeString(),
-            'options'    => [
+            'end_date' => now()->addDays(7)->toDateTimeString(),
+            'options' => [
                 ['text' => 'Laravel'],
                 ['text' => 'Spring Boot'],
                 ['text' => 'Express.js'],
@@ -37,8 +37,8 @@ class PollControllerTest extends TestCase
                 'start_date',
                 'end_date',
                 'options' => [
-                    '*' => ['id', 'poll_id', 'text', 'votes']
-                ]
+                    '*' => ['id', 'poll_id', 'text', 'votes'],
+                ],
             ]);
 
         $this->assertDatabaseHas('polls', [
@@ -53,7 +53,7 @@ class PollControllerTest extends TestCase
         $payload = [
             'question' => 'Qual o seu framework favorito?',
             'start_date' => now()->addDay()->toDateTimeString(),
-            'end_date'   => now()->addDays(7)->toDateTimeString(),
+            'end_date' => now()->addDays(7)->toDateTimeString(),
             'options' => [
                 ['text' => 'laravel'],
                 ['text' => 'spring'],
@@ -75,10 +75,10 @@ class PollControllerTest extends TestCase
     public function test_deve_retornar_total_de_votos_e_porcentagem_no_resource(): void
     {
         $poll = Poll::create([
-            'question'   => 'Qual o seu framework favorito?',
-            'status'     => 'iniciado',
+            'question' => 'Qual o seu framework favorito?',
+            'status' => PollStatus::INICIADO,
             'start_date' => now()->subDay(),
-            'end_date'   => now()->addDays(7),
+            'end_date' => now()->addDays(7),
         ]);
 
         $poll->options()->create(['text' => 'Laravel', 'votes' => 3]);
@@ -97,10 +97,10 @@ class PollControllerTest extends TestCase
     public function test_pode_editar_enquete_nao_iniciada(): void
     {
         $poll = Poll::create([
-            'question'   => 'Qual o seu framework favorito?',
-            'status'     => 'nao_iniciado',
+            'question' => 'Qual o seu framework favorito?',
+            'status' => PollStatus::NAO_INICIADO,
             'start_date' => now()->subDay(),
-            'end_date'   => now()->addDays(7),
+            'end_date' => now()->addDay(),
         ]);
 
         $poll->options()->create(['text' => 'Laravel']);
@@ -108,14 +108,14 @@ class PollControllerTest extends TestCase
         $poll->options()->create(['text' => 'Express.js']);
 
         $payload = [
-            'question' => 'Qual é o seu framework favorito?'
+            'question' => 'Qual é o seu framework favorito?',
         ];
 
         $response = $this->putJson("/api/polls/{$poll->id}", $payload);
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('polls', [
-            'id'       => $poll->id,
+            'id' => $poll->id,
             'question' => 'Qual é o seu framework favorito?',
         ]);
     }
@@ -123,10 +123,10 @@ class PollControllerTest extends TestCase
     public function test_nao_deve_permitir_editar_enquete_ja_iniciada(): void
     {
         $poll = Poll::create([
-            'question'   => 'Qual o seu framework favorito?',
-            'status'     => 'iniciado',
+            'question' => 'Qual o seu framework favorito?',
+            'status' => PollStatus::INICIADO,
             'start_date' => now()->subDay(),
-            'end_date'   => now()->addDays(7),
+            'end_date' => now()->addDays(7),
         ]);
 
         $poll->options()->create(['text' => 'Laravel']);
@@ -134,14 +134,14 @@ class PollControllerTest extends TestCase
         $poll->options()->create(['text' => 'Express.js']);
 
         $payload = [
-            'question' => 'Qual é o seu framework favorito?'
+            'question' => 'Qual é o seu framework favorito?',
         ];
 
         $response = $this->putJson("/api/polls/{$poll->id}", $payload);
 
         $response->assertStatus(422);
         $this->assertDatabaseHas('polls', [
-            'id'       => $poll->id,
+            'id' => $poll->id,
             'question' => 'Qual o seu framework favorito?',
         ]);
     }
@@ -151,10 +151,10 @@ class PollControllerTest extends TestCase
         Event::fake();
 
         $poll = Poll::create([
-            'question'   => 'Qual o seu framework favorito?',
-            'status'     => 'iniciado',
+            'question' => 'Qual o seu framework favorito?',
+            'status' => PollStatus::INICIADO,
             'start_date' => now()->subDay(),
-            'end_date'   => now()->addDays(7),
+            'end_date' => now()->addDays(7),
         ]);
 
         $option = $poll->options()->create(['text' => 'Laravel', 'votes' => 0]);
@@ -164,7 +164,7 @@ class PollControllerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('options', [
-            'id'    => $option->id,
+            'id' => $option->id,
             'votes' => 1,
         ]);
 
@@ -180,10 +180,10 @@ class PollControllerTest extends TestCase
     public function test_nao_deve_permitir_votar_em_enquete_fechada(): void
     {
         $poll = Poll::create([
-            'question'   => 'Qual o seu framework favorito?',
-            'status'     => 'finalizado',
+            'question' => 'Qual o seu framework favorito?',
+            'status' => PollStatus::FINALIZADO,
             'start_date' => now()->subDays(10),
-            'end_date'   => now()->subDays(2),
+            'end_date' => now()->subDays(2),
         ]);
 
         $option = $poll->options()->create(['text' => 'Laravel', 'votes' => 0]);
@@ -193,7 +193,7 @@ class PollControllerTest extends TestCase
         $response->assertStatus(422);
 
         $this->assertDatabaseHas('options', [
-            'id'    => $option->id,
+            'id' => $option->id,
             'votes' => 0,
         ]);
     }
@@ -201,10 +201,10 @@ class PollControllerTest extends TestCase
     public function test_nao_deve_permitir_votar_em_opcao_inexistente(): void
     {
         $poll = Poll::create([
-            'question'   => 'Qual o seu framework favorito?',
-            'status'     => 'iniciado',
+            'question' => 'Qual o seu framework favorito?',
+            'status' => PollStatus::INICIADO,
             'start_date' => now()->subDay(),
-            'end_date'   => now()->addDays(7),
+            'end_date' => now()->addDays(7),
         ]);
 
         $fakeOptionId = (string) Str::uuid();

@@ -17,7 +17,7 @@ class PollService
 
     public function storePoll(array $dados)
     {
-        return DB::transaction(fn() => $this->repository->storePoll($dados));
+        return DB::transaction(fn () => $this->repository->storePoll($dados));
     }
 
     public function index()

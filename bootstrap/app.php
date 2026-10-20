@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*') || $request->wantsJson()) {
                 return response()->json([
-                    'message' => 'Enquete não encontrada.'
+                    'message' => 'Enquete não encontrada.',
                 ], 404);
             }
         });
