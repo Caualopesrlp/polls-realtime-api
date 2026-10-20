@@ -71,4 +71,9 @@ class PollRepository
     {
         return Poll::with('options')->findOrFail($pollId);
     }
+
+    public function totalVotos(string $pollId)
+    {
+        return Option::where('poll_id', $pollId)->sum('votes');
+    }
 }

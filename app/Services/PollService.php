@@ -51,7 +51,11 @@ class PollService
                 abort(422, 'Não é possível votar nessa opção');
             }
 
-            OptionVoted::dispatch($pollId, $optionId, $voto);
+            $totalVotosPoll = $this->repository->totalVotos($pollId);
+
+            $porcentagem = $this->calcularPorcentagemVotos($voto, $totalVotosPoll);
+
+            OptionVoted::dispatch($pollId, $optionId, $voto, $totalVotosPoll, $porcentagem);
 
             return $voto;
         });
@@ -60,5 +64,14 @@ class PollService
     public function show(string $pollId)
     {
         return $this->repository->show($pollId);
+    }
+
+    private function calcularPorcentagemVotos(int $optionVotes, int $totalVotes): float
+    {
+        if ($totalVotes > 0) {
+            return round(($optionVotes / $totalVotes) * 100, 2);
+        }
+
+        return 0.0;
     }
 }
