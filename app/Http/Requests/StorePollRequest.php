@@ -30,4 +30,20 @@ class StorePollRequest extends FormRequest
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'question.required' => 'É obrigatório conter uma pergunta',
+            'question.min' => 'É obrigatório ter no mínimo uma pergunta',
+            'question.string' => 'A pergunta deve ser um texto',
+
+            'options.required' => 'É obrigatório que tenham opções para votar',
+            'options.min' => 'A enquete deve ter no mínimo 3 opções de voto',
+
+            'start_date.required' => 'A data de início é obrigatória',
+            'end_date.required' => 'A data de término é obrigatória',
+            'end_date.after_or_equal' => 'A data de término deve ser posterior ou igual a data de início',
+        ];
+    }
 }
