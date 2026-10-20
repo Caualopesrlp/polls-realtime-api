@@ -49,7 +49,10 @@ class PollController extends Controller
 
         $response = $this->service->vote($pollId, $optionId);
 
-        return response()->json($response, 200);
+        return response()->json([
+            'message' => 'Voto computado com sucesso!',
+            'total_votos' => $response,
+        ], 200);
     }
 
     public function show(string $pollId)
