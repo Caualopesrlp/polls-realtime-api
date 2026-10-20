@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePollRequest;
 use App\Http\Requests\UpdatePollRequest;
+use App\Http\Resources\PollResource;
 use App\Services\PollService;
 use Illuminate\Http\Request;
 use Nette\Schema\ValidationException;
@@ -28,10 +29,7 @@ class PollController extends Controller
 
     public function index()
     {
-
-        $response = $this->service->index();
-
-        return response()->json($response, 200);
+        return PollResource::collection($this->service->index());
     }
 
     public function update(UpdatePollRequest $request, string $uuid)
@@ -57,8 +55,6 @@ class PollController extends Controller
 
     public function show(string $pollId)
     {
-        $response = $this->service->show($pollId);
-
-        return response()->json($response, 200);
+        return new PollResource($this->service->show($pollId));
     }
 }
