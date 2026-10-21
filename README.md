@@ -1,60 +1,195 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# <h1 align="center">Polls Realtime API — Sistema de Enquetes em Tempo Real</h1>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
+  <!-- Badges -->
+  ![Laravel 11](https://img.shields.io/badge/Laravel-11-blue?logo=laravel)
+  ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777bb3?logo=php)
+  ![Docker](https://img.shields.io/badge/Docker-✓-2496ED?logo=docker)
+  ![WebSockets](https://img.shields.io/badge/WebSockets-Reverb-FF4500)
+  ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-✓-336791?logo=postgresql)
+  ![Swagger/OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger)
+  [📚 Docs API](http://localhost:8000/docs/api)
+</div>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Demonstração
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<!-- TODO: Adicionar GIF/Vídeo demonstrativo do fluxo de votação em tempo real e Reverb -->
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<!-- TODO: Adicionar Screenshot da documentação do Swagger UI / Scramble (/docs/api) -->
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 📌 Sobre o Projeto
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+A **Polls Realtime API** é uma API RESTful construída com **Laravel 11** que permite a criação, gerenciamento e votação em enquetes com atualizações em **tempo real** através de **WebSockets (Laravel Reverb)**. Utiliza **PHP Enums** (`PollStatus`) para tipagem forte, um agendador de tarefas que transita automaticamente o status das enquetes e gera documentação **OpenAPI** interativa via **Scramble**.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📚 Inspiração & Creditos
 
-### Premium Partners
+Este projeto foi desenvolvido como resposta a um **desafio técnico publicado no LinkedIn**. A ideia central (enquetes em tempo real com votação via WebSockets) foi adaptada para a stack Laravel/PHP que domino. 
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+<!-- TODO: Inserir link para a postagem original no LinkedIn e/ou referência ao recrutador, caso deseje. -->
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🚀 Funcionalidades & Regras de Negócio Implementadas
 
-## Code of Conduct
+- **CRUD completo de Enquetes** com validação mínima de **3 opções**.
+- **Bloqueio de edição** para enquetes já iniciadas.
+- **Votação em tempo real** disparando o evento `OptionVoted` via Laravel Reverb.
+- **Cálculo automático** de total de votos e percentuais retornados pelo `PollResource`.
+- **Transição automática de status** (`NAO_INICIADO → EM_ANDAMENTO → FINALIZADO`) através do comando Artisan `polls:update-statuses` executado a cada minuto pelo scheduler.
+- **Suite de testes** cobrindo os principais cenários de feature usando `RefreshDatabase` e `Event::fake()`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🛠️ Arquitetura & Padrões de Projeto (Clean Architecture)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Camada                | Responsabilidade |
+|-----------------------|-------------------|
+| **Controllers**       | `PollController` – orquestra requisições HTTP. |
+| **Form Requests**     | `StorePollRequest`, `UpdatePollRequest` – validação de entrada. |
+| **Services**          | `PollService` – lógica de negócios, coordena repositórios e eventos. |
+| **Repositories**      | `PollRepository` – abstração de acesso ao banco. |
+| **Resources**         | `PollResource` – formatação da resposta JSON. |
+| **Enums**             | `PollStatus` – enum PHP 8.1+ representando os estados da enquete. |
+| **Events & WebSockets** | `OptionVoted` + Laravel Reverb – entrega de atualizações em tempo real. |
+| **Console Commands / Scheduler** | `UpdatePollStatusesCommand` – atualiza status das enquetes periodicamente. |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# polls-realtime-api
+## 📄 Documentação da API (Swagger / OpenAPI via Scramble)
+
+A documentação interativa é gerada automaticamente pelo **Scramble**. Basta acessar:
+
+```
+http://localhost:8000/docs/api
+```
+
+A interface permite explorar endpoints, testar requisições e visualizar os schemas de request/response.
+
+---
+
+## ⚙️ Variáveis de Ambiente
+
+O projeto utiliza as variáveis listadas em `.env.example`. As chaves principais são:
+
+| Variable | Description |
+|----------|-------------|
+| `APP_NAME` | Nome da aplicação. |
+| `APP_ENV` | Ambiente (`local`, `production`, …). |
+| `APP_KEY` | Chave de criptografia da aplicação (gerada com `php artisan key:generate`). |
+| `APP_DEBUG` | Habilita modo debug. |
+| `APP_URL` | URL base da aplicação. |
+| `DB_CONNECTION` | Driver de banco (sqlite para desenvolvimento, pgsql via Docker). |
+| `BROADCAST_CONNECTION` | Driver de broadcast (`reverb`). |
+| `REVERB_APP_ID` | Identificador da aplicação Reverb. |
+| `REVERB_APP_KEY` | Chave pública Reverb. |
+| `REVERB_APP_SECRET` | Segredo Reverb. |
+| `REVERB_HOST` | Host do servidor Reverb. |
+| `REVERB_PORT` | Porta do servidor Reverb. |
+| `VITE_...` | Variáveis expostas ao Vite (frontend) para o Reverb. |
+
+Copie `.env.example` para `.env` e ajuste conforme necessário.
+
+---
+
+## 📂 Estrutura do Repositório
+
+```
+.
+├─ app
+│  ├─ Console
+│  │  └─ Commands
+│  │     └─ UpdatePollStatusesCommand.php
+│  ├─ Enums
+│  │  └─ PollStatus.php
+│  ├─ Events
+│  │  └─ OptionVoted.php
+│  ├─ Http
+│  │  ├─ Controllers
+│  │  │  ├─ Controller.php
+│  │  │  └─ PollController.php
+│  │  ├─ Requests
+│  │  │  ├─ StorePollRequest.php
+│  │  │  └─ UpdatePollRequest.php
+│  │  └─ Resources
+│  │     └─ PollResource.php
+│  ├─ Models
+│  │  ├─ Option.php
+│  │  ├─ Poll.php
+│  │  └─ User.php
+│  ├─ Providers
+│  │  └─ AppServiceProvider.php
+│  ├─ Repositories
+│  │  └─ PollRepository.php
+│  └─ Services
+│     └─ PollService.php
+├─ config
+│  └─ scramble.php
+├─ database
+│  └─ (migrations, seeders …)
+├─ routes
+│  └─ api.php
+├─ tests
+│  └─ Feature
+│     └─ PollControllerTest.php
+├─ Dockerfile
+├─ docker-compose.yml
+├─ composer.json
+├─ phpunit.xml
+└─ README.md
+```
+
+---
+
+## 💻 Como Executar o Projeto
+
+### Opção A: Via Docker Compose (Recomendado)
+
+```bash
+# Build e start dos containers
+docker compose up -d --build
+
+# Executar migrações e seed (dentro do container `app`)
+docker compose exec app php artisan migrate --seed
+```
+
+- API disponível em **http://localhost:8000**
+- Reverb (WebSockets) em **http://localhost:8080**
+- PostgreSQL na porta **5432**
+
+### Opção B: Execução Local sem Docker
+
+```bash
+composer install
+cp .env.example .env   # ajuste as variáveis de ambiente
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve          # http://127.0.0.1:8000
+php artisan reverb:start --host=127.0.0.1 --port=8080
+```
+
+---
+
+## 🧪 Executando a Suíte de Testes
+
+```bash
+php artisan test
+```
+
+A suite contém **~10 testes de feature** cobrindo criação, atualização, votação e regras de negócio de status das enquetes.
+
+---
+
+## 👨💻 Autor
+
+**Cauã Lopes** – desenvolvedor full‑stack
+
+- GitHub: [caualopesrlp](https://github.com/Caualopesrlp)
+- LinkedIn: [caualopesrlp](https://linkedin.com/in/caualopesrlp)
+
+---
