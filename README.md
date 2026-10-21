@@ -1,14 +1,15 @@
-# <h1 align="center">Polls Realtime API — Sistema de Enquetes em Tempo Real</h1>
-
 <div align="center">
-  <!-- Badges -->
-  ![Laravel 11](https://img.shields.io/badge/Laravel-11-blue?logo=laravel)
-  ![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777bb3?logo=php)
-  ![Docker](https://img.shields.io/badge/Docker-✓-2496ED?logo=docker)
-  ![WebSockets](https://img.shields.io/badge/WebSockets-Reverb-FF4500)
-  ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-✓-336791?logo=postgresql)
-  ![Swagger/OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger)
-  [📚 Docs API](http://localhost:8000/docs/api)
+
+# Polls Realtime API — Sistema de Enquetes em Tempo Real
+
+[![Laravel 11](https://img.shields.io/badge/Laravel-11-blue?logo=laravel)](https://laravel.com)
+[![PHP 8.3](https://img.shields.io/badge/PHP-8.3-777bb3?logo=php)](https://www.php.net)
+[![Docker](https://img.shields.io/badge/Docker-✓-2496ED?logo=docker)](https://www.docker.com)
+[![WebSockets](https://img.shields.io/badge/WebSockets-Reverb-FF4500)](https://laravel.com/docs/reverb)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-✓-336791?logo=postgresql)](https://www.postgresql.org)
+[![Swagger/OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger)](https://swagger.io)
+[📚 Docs API](http://localhost:8000/docs/api)
+
 </div>
 
 ---
@@ -187,7 +188,7 @@ A suite contém **~10 testes de feature** cobrindo criação, atualização, vot
 
 ## 👨💻 Autor
 
-**Cauã Lopes** – desenvolvedor full‑stack
+**Cauã Lopes** 
 
 - GitHub: [caualopesrlp](https://github.com/Caualopesrlp)
 - LinkedIn: [caualopesrlp](https://linkedin.com/in/caualopesrlp)
