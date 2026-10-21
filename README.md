@@ -8,7 +8,7 @@
 [![WebSockets](https://img.shields.io/badge/WebSockets-Reverb-FF4500)](https://laravel.com/docs/reverb)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-✓-336791?logo=postgresql)](https://www.postgresql.org)
 [![Swagger/OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger)](https://swagger.io)
-[📚 Docs API](http://localhost:8000/docs/api)
+[![Docs API](https://img.shields.io/badge/Docs%20API-OpenAPI-85EA2D?logo=swagger)](http://localhost:8000/docs/api)
 
 </div>
 
@@ -148,6 +148,9 @@ Copie `.env.example` para `.env` e ajuste conforme necessário.
 ---
 
 ## 💻 Como Executar o Projeto
+
+> **Observação:** Ao usar Docker Compose a aplicação conecta‑se a um banco PostgreSQL (definido em `docker-compose.yml`). Em um ambiente local sem Docker, a conexão padrão é SQLite, conforme configurado em `.env.example`. Ajuste o arquivo `.env` caso prefira outro driver.
+
 
 ### Opção A: Via Docker Compose (Recomendado)
 
