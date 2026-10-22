@@ -10,9 +10,14 @@
 
 ---
 
-## Demonstração
+## 🎥 Demonstração
 
-<!-- TODO: Adicionar GIF/Vídeo demonstrativo do fluxo de votação em tempo real e Reverb -->
+### Votação em Tempo Real (WebSockets no Bruno)
+![Demonstração da Votação em Tempo Real](https://github.com/user-attachments/assets/c6296382-f5d8-4a40-8dbf-7960760f37c3)
+
+### Documentação Interativa (Scramble)
+![Documentação OpenAPI Scramble](https://github.com/user-attachments/assets/6e1cb08e-c7c2-4595-9610-f14476a8b35f)
+
 
 ---
 
