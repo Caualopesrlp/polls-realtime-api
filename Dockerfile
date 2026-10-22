@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensões do PHP necessárias para Laravel e PostgreSQL
-RUN docker-php-ext-install pdo_pgsql pgsql bcmath zip
+RUN docker-php-ext-install pdo_pgsql pgsql bcmath zip pcntlp
 
 # Copiar o executável do Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
