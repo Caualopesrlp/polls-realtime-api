@@ -1,5 +1,3 @@
-<div align="center">
-
 # Polls Realtime API — Sistema de Enquetes em Tempo Real
 
 [![Laravel 11](https://img.shields.io/badge/Laravel-11-blue?logo=laravel)](https://laravel.com)
@@ -10,15 +8,11 @@
 [![Swagger/OpenAPI](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?logo=swagger)](https://swagger.io)
 [![Docs API](https://img.shields.io/badge/Docs%20API-OpenAPI-85EA2D?logo=swagger)](http://localhost:8000/docs/api)
 
-</div>
-
 ---
 
 ## Demonstração
 
 <!-- TODO: Adicionar GIF/Vídeo demonstrativo do fluxo de votação em tempo real e Reverb -->
-
-<!-- TODO: Adicionar Screenshot da documentação do Swagger UI / Scramble (/docs/api) -->
 
 ---
 
@@ -28,11 +22,13 @@ A **Polls Realtime API** é uma API RESTful construída com **Laravel 11** que p
 
 ---
 
-## 📚 Inspiração & Creditos
+## 📚 Inspiração & Créditos
 
-Este projeto foi desenvolvido como resposta a um **desafio técnico publicado no LinkedIn**. A ideia central (enquetes em tempo real com votação via WebSockets) foi adaptada para a stack Laravel/PHP que domino. 
+Este projeto foi desenvolvido como resposta a um **desafio técnico publicado no LinkedIn** por *Dev Lopes*.
 
-<!-- TODO: Inserir link para a postagem original no LinkedIn e/ou referência ao recrutador, caso deseje. -->
+- Publicação no LinkedIn: [https://lnkd.in/p/dQkgDjnv](https://lnkd.in/p/dQkgDjnv)
+- Perfil do autor da publicação: [https://www.linkedin.com/in/d3vlopes/](https://www.linkedin.com/in/d3vlopes/)
+- GitHub do autor: [https://github.com/d3vlopes](https://github.com/d3vlopes)
 
 ---
 
@@ -69,8 +65,6 @@ A documentação interativa é gerada automaticamente pelo **Scramble**. Basta a
 ```
 http://localhost:8000/docs/api
 ```
-
-A interface permite explorar endpoints, testar requisições e visualizar os schemas de request/response.
 
 ---
 
@@ -137,7 +131,7 @@ Copie `.env.example` para `.env` e ajuste conforme necessário.
 │  └─ api.php
 ├─ tests
 │  └─ Feature
-│     └─ PollControllerTest.php
+│      └─ PollControllerTest.php
 ├─ Dockerfile
 ├─ docker-compose.yml
 ├─ composer.json
@@ -149,14 +143,20 @@ Copie `.env.example` para `.env` e ajuste conforme necessário.
 
 ## 💻 Como Executar o Projeto
 
-> **Observação:** Ao usar Docker Compose a aplicação conecta‑se a um banco PostgreSQL (definido em `docker-compose.yml`). Em um ambiente local sem Docker, a conexão padrão é SQLite, conforme configurado em `.env.example`. Ajuste o arquivo `.env` caso prefira outro driver.
-
+> **Observação:** O arquivo `.env.example` já está configurado para uso com Docker (PostgreSQL, Reverb, etc.). Basta copiar e seguir os passos abaixo.
 
 ### Opção A: Via Docker Compose (Recomendado)
 
 ```bash
 # Build e start dos containers
 docker compose up -d --build
+
+# Preparar a aplicação dentro do container
+docker compose run --rm app cp .env.example .env
+# Instalar dependências PHP
+docker compose run --rm app composer install
+# Gerar a chave da aplicação
+docker compose run --rm app php artisan key:generate
 
 # Executar migrações e seed (dentro do container `app`)
 docker compose exec app php artisan migrate --seed
@@ -170,7 +170,7 @@ docker compose exec app php artisan migrate --seed
 
 ```bash
 composer install
-cp .env.example .env   # ajuste as variáveis de ambiente
+cp .env.example .env   # ajuste as variáveis de ambiente se necessário
 php artisan key:generate
 php artisan migrate --seed
 php artisan serve          # http://127.0.0.1:8000
@@ -181,17 +181,34 @@ php artisan reverb:start --host=127.0.0.1 --port=8080
 
 ## 🧪 Executando a Suíte de Testes
 
+### Testes no Docker
+```bash
+docker compose exec app php artisan test
+```
+
+### Testes local (sem Docker)
 ```bash
 php artisan test
 ```
 
-A suite contém **~10 testes de feature** cobrindo criação, atualização, votação e regras de negócio de status das enquetes.
+---
+
+## 🛠️ Solução de Problemas
+
+- **Configurações não recarregam após mudar `.env`**
+  ```bash
+  docker compose exec app php artisan config:clear
+  ```
+  Limpa o cache de configuração do Laravel.
+
+- **Erro de conexão ao banco**
+  Verifique se o container `db` está ativo (`docker compose ps`) e se as variáveis `DB_*` no `.env` estão corretas.
 
 ---
 
 ## 👨💻 Autor
 
-**Cauã Lopes** 
+**Cauã Lopes**
 
 - GitHub: [caualopesrlp](https://github.com/Caualopesrlp)
 - LinkedIn: [caualopesrlp](https://linkedin.com/in/caualopesrlp)
